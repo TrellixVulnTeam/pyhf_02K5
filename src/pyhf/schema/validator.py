@@ -3,12 +3,17 @@ import logging
 import pyhf.exceptions
 from pyhf.schema.loader import load_schema
 from pyhf.schema import variables
-from typing import Union, Mapping
+from typing import Union
+from pyhf.typing import Workspace, Model, Measurement, PatchSet
 
 log = logging.getLogger(__name__)
 
 
-def validate(spec: Mapping, schema_name: str, version: Union[str, None] = None):
+def validate(
+    spec: Union[Workspace, Model, Measurement, PatchSet],
+    schema_name: str,
+    version: Union[str, None] = None,
+) -> None:
     """
     Validate a provided specification against a schema.
 
@@ -33,10 +38,11 @@ def validate(spec: Mapping, schema_name: str, version: Union[str, None] = None):
     schema = load_schema(f'{version}/{schema_name}')
 
     # note: trailing slash needed for RefResolver to resolve correctly
+    # for type ignores below, see https://github.com/python-jsonschema/jsonschema/issues/997
     resolver = jsonschema.RefResolver(
         base_uri=f"file://{variables.schemas}/{version}/{schema_name}",
-        referrer=load_schema(f"{version}/defs.json"),
-        store=variables.SCHEMA_CACHE,
+        referrer=load_schema(f"{version}/defs.json"),  # type: ignore[arg-type]
+        store=variables.SCHEMA_CACHE,  # type: ignore[arg-type]
     )
     validator = jsonschema.Draft202012Validator(
         schema, resolver=resolver, format_checker=None
@@ -45,4 +51,4 @@ def validate(spec: Mapping, schema_name: str, version: Union[str, None] = None):
     try:
         return validator.validate(spec)
     except jsonschema.ValidationError as err:
-        raise pyhf.exceptions.InvalidSpecification(err, schema_name)
+        raise pyhf.exceptions.InvalidSpecification(err, schema_name)  # type: ignore[no-untyped-call]
