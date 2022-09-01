@@ -68,7 +68,7 @@ repos:
         name: mypy with Python 3.7
         files: src
         additional_dependencies:
-          ['numpy', 'types-tqdm', 'click', 'types-jsonpatch', 'types-pyyaml', 'types-jsonschema', 'importlib_metadata', 'packaging']
+          ['numpy', 'types-tqdm', 'click', 'types-jsonpatch', 'types-pyyaml', 'types-jsonschema', 'importlib_metadata', 'packaging', 'importlib_resources']
         args: ["--python-version=3.7"]
       - <<: *mypy
         name: mypy with Python 3.10
