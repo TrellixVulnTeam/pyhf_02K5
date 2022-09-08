@@ -20,11 +20,13 @@ extras_require['backends'] = sorted(
     )
 )
 extras_require['contrib'] = sorted({'matplotlib', 'requests'})
+extras_require['experimental'] = sorted(['numexpr'])
 extras_require['test'] = sorted(
     set(
         extras_require['backends']
         + extras_require['xmlio']
         + extras_require['contrib']
+        + extras_require['experimental']
         + extras_require['shellcomplete']
         + [
             'scikit-hep-testdata>=0.4.11',
@@ -48,6 +50,7 @@ extras_require['docs'] = sorted(
     set(
         extras_require['xmlio']
         + extras_require['contrib']
+        + extras_require['experimental']
         + [
             'sphinx>=5.1.1',  # c.f. https://github.com/scikit-hep/pyhf/pull/1926
             'sphinxcontrib-bibtex~=2.1',
