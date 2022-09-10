@@ -34,16 +34,17 @@ jobs:
     - name: Install from PyPI
       run: |
         python -m pip install --upgrade pip setuptools wheel
-        python -m pip install pyhf[backends,xmlio]
-        python -m pip install 'pytest~=7.0' pytest-cov
+        python -m pip install --pre pyhf[backends,xmlio]
+        python -m pip install pytest pytest-cov
         python -m pip list
 
     - name: Canary test public API
       run: |
         pytest tests/test_public_api.py
 
+      # FIXME: c.f. https://github.com/proycon/codemetapy/issues/24
     - name: Verify requirements in codemeta.json
       run: |
-        python -m pip install jq "codemetapy>=0.3.4"
+        python -m pip install jq "codemetapy==0.3.5"
         codemetapy --no-extras pyhf > codemeta_generated.json
-        diff <(jq -S .softwareRequirements codemeta_generated.json) <(jq -S .softwareRequirements codemeta.json)
+        diff <(jq -S .softwareRequirements codemeta.json) <(jq -S .softwareRequirements codemeta_generated.json)
